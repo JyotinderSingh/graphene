@@ -5,6 +5,7 @@
   "main": "dist/graphene.js",
   "scripts": {
     "run": "node dist/graphene.js",
+    "build": "rm -rf dist && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jyotinder Singh",
