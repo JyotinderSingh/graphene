@@ -1,3 +1,4 @@
+import { Query } from "../query/query";
 import {
   IGraph, verticesType, vertexType, edgesType, vertexIndexType, edgeType
 } from "../types/primitives";
@@ -69,5 +70,18 @@ export class Graph implements IGraph {
     } else {
       return undefined;
     }
+  }
+
+  /**
+   * NOTE: Check if this works properly, otherwise convert to non arrow 
+   * function.
+   * @param args 
+   * @returns 
+   */
+  v = (...args: any[]) => {
+    // initialize
+    const query = new Query(this);
+    query.add("vertex", [...args]);
+    return query;
   }
 }
