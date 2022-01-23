@@ -188,3 +188,53 @@ export const takePipeTypeMethod = (_graph: Graph, args: any[],
 
   return gremlin;
 }
+
+/**
+ * Allows you to label the current vertex.
+ * @param _graph graph to query
+ * @param args arguments to the pipeType
+ * @param gremlin gremlin to use as input
+ * @param _state state to use for the new gremlin
+ * @returns 
+ */
+export const asPipeTypeMethod = (_graph: Graph, args: any[],
+  gremlin: IGremlin, _state: IGraphState)
+  : "pull" | IGremlin => {
+  // query initialization.
+  if (!gremlin) return "pull";
+
+  // init the 'as' state.
+  gremlin.state.as = gremlin.state.as || {};
+  // set label to vertex.
+  gremlin.state.as[args[0]] = gremlin.vertex;
+  return gremlin;
+}
+
+/**
+ * Maps over each argument, looking for it in the gremlin's list of labeled
+ * vertices. If we find it, we clone the gremlin to that vertex. Note that only
+ * gremlins that make it to this pipe are included in the merge.
+ * @param graph graph to query
+ * @param args arguments to the pipeType
+ * @param gremlin gremlin to use as input
+ * @param state state to use for the new gremlin
+ * @returns
+ */
+export const mergePipeTypeMethod = (_graph: Graph, args: any[],
+  gremlin: IGremlin, state: IGraphState)
+  : "pull" | IGremlin => {
+  // query initialization.
+  if (!state.vertices && !gremlin) return "pull";
+
+  // state initialization.
+  if (!state.vertices || !state.vertices.length) {
+    const obj = (gremlin.state || {}).as || {};
+    state.vertices = args.map((id) => obj[id]).filter(Boolean);
+  }
+
+  // done with this batch.
+  if (!state.vertices.length) return "pull";
+
+  const vertex = state.vertices.pop();
+  return makeGremlin(vertex as vertexType, gremlin.state);
+}

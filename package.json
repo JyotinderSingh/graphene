@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "tiny in-memory graph database",
   "main": "dist/graphene.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JyotinderSingh/graphene"
+  },
   "scripts": {
     "run": "node dist/graphene.js",
     "build": "rm -rf dist && tsc",

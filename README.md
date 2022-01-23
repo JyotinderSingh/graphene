@@ -16,6 +16,6 @@ const E = [{ _out: 1, _in: 10, _label: "knows" }];
 const g = new Graphene(V, E);
 
 g.graph.addVertex({ name: "charlie", _id: "charlie" });
-g.graph.addVertex({ name: "delta", _id: "30" }); // in fact they're all strings
+g.graph.addVertex({ name: "delta", _id: "30" });
 g.graph.addEdge({ _out: 10, _in: 30, _label: "parent" });
 ```

@@ -45,7 +45,7 @@ export interface IGraph {
 }
 
 export interface IGremlin {
-  state: any;
+  state: { [x: string | number | symbol]: any };
   vertex: vertexType;
   result?: unknown;
 }
