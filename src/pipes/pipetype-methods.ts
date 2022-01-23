@@ -238,3 +238,12 @@ export const mergePipeTypeMethod = (_graph: Graph, args: any[],
   const vertex = state.vertices.pop();
   return makeGremlin(vertex as vertexType, gremlin.state);
 }
+
+export const exceptPipeTypeMethod = (_graph: Graph, args: any[],
+  gremlin: IGremlin, _state: IGraphState)
+  : "pull" | IGremlin => {
+  // query initialization.
+  if (!gremlin) return "pull";
+  if (gremlin.vertex == gremlin.state.as[args[0]]) return "pull";
+  return gremlin;
+}

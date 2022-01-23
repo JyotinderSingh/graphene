@@ -2,6 +2,7 @@ import { Graph } from "./graph/graph";
 import { addPipeType } from "./pipes/pipetype";
 import {
   asPipeTypeMethod,
+  exceptPipeTypeMethod,
   filterPipeTypeMethod,
   mergePipeTypeMethod,
   propertyPipeTypeMethod,
@@ -27,6 +28,7 @@ export class Graphene {
     addPipeType(this.query, "take", takePipeTypeMethod);
     addPipeType(this.query, "as", asPipeTypeMethod);
     addPipeType(this.query, "merge", mergePipeTypeMethod);
+    addPipeType(this.query, "except", exceptPipeTypeMethod);
   }
   graph: Graph;
   query: Query;
