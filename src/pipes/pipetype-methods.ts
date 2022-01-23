@@ -239,6 +239,14 @@ export const mergePipeTypeMethod = (_graph: Graph, args: any[],
   return makeGremlin(vertex as vertexType, gremlin.state);
 }
 
+/**
+ * Check whether the current vertex is equal to the one saved in the "as" label.
+ * @param _graph graph to query
+ * @param args arguments to the pipeType
+ * @param gremlin gremlin to use as input
+ * @param _state state to use for the new gremlin
+ * @returns 
+ */
 export const exceptPipeTypeMethod = (_graph: Graph, args: any[],
   gremlin: IGremlin, _state: IGraphState)
   : "pull" | IGremlin => {
@@ -246,4 +254,20 @@ export const exceptPipeTypeMethod = (_graph: Graph, args: any[],
   if (!gremlin) return "pull";
   if (gremlin.vertex == gremlin.state.as[args[0]]) return "pull";
   return gremlin;
+}
+
+/**
+ * 
+ * @param _graph graph to query
+ * @param args arguments to the pipeType
+ * @param gremlin gremlin to use as input
+ * @param _state state to use for the new gremlin
+ * @returns 
+ */
+export const backPipeTypeMethod = (_graph: Graph, args: any[],
+  gremlin: IGremlin, _state: IGraphState)
+  : "pull" | IGremlin => {
+  if (!gremlin) return "pull";
+
+  return gotoVertex(gremlin, gremlin.state.as[args[0]]);
 }
