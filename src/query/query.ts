@@ -1,8 +1,9 @@
-import { IGraph } from "../types/primitives";
-import { IQuery, pipeTypeConstant, stepType } from "./types/queryTypes";
+import { Graph } from "../graph/graph";
+import { IQuery, pipeTypeConstant, pipetypeQueryMethod, stepType } from "./types/queryTypes";
 
 export class Query implements IQuery {
-  graph: IGraph;  // the graph itself
+  graph: Graph;  // the graph itself
+  pipetypeQuery: Map<pipeTypeConstant, pipetypeQueryMethod>;
 
   /** each step in our program can have state.
    * This state is a list of per-step states that the index correlates with a
@@ -21,11 +22,12 @@ export class Query implements IQuery {
    */
   gremlins = [];  // gremlins for each step
 
-  constructor(graph: IGraph) {
+  constructor(graph: Graph) {
     this.graph = graph;
+    this.pipetypeQuery = new Map<pipeTypeConstant, pipetypeQueryMethod>();
   }
 
-  add = (pipeType: pipeTypeConstant, args: any[]): IQuery => {
+  add = (pipeType: pipeTypeConstant, args: any[]): Query => {
     // A step is pair of a pipeType function and its arguments.
     const step: stepType = [pipeType, args];
     // Add the step to the program.
