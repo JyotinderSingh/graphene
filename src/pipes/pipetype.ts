@@ -11,10 +11,10 @@ export const PipeTypes: any = {}
  */
 export const addPipeType = (query: Query, name: pipeTypeConstant, fun: Function) => {
   PipeTypes[name] = fun;
-  query.pipetypeQuery.set(name, (...args: any[]) => {
+  query.pipetypeQuery[name] = (...args: any[]) => {
     // capture pipeType and args.
     return query.add(name, [...args]);
-  });
+  };
 }
 
 export const getPipeType = (name: pipeTypeConstant) => {
