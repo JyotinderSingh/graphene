@@ -3,7 +3,7 @@ import { IQuery, pipeTypeConstant, pipetypeQueryMethod, stepType } from "./types
 
 export class Query implements IQuery {
   graph: Graph;  // the graph itself
-  pipetypeQuery: {[key in pipeTypeConstant]?: pipetypeQueryMethod};
+  pipe: {[key in pipeTypeConstant]?: pipetypeQueryMethod};
 
   /** each step in our program can have state.
    * This state is a list of per-step states that the index correlates with a
@@ -24,7 +24,7 @@ export class Query implements IQuery {
 
   constructor(graph: Graph) {
     this.graph = graph;
-    this.pipetypeQuery = {};
+    this.pipe = {};
   }
 
   add = (pipeType: pipeTypeConstant, args: any[]): Query => {
