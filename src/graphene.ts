@@ -15,6 +15,8 @@ import {
 import { Query } from "./query/query";
 
 export class Graphene {
+  graph: Graph;
+  query: Query;
   constructor(V: any, E: any) {
     this.graph = new Graph(V, E);
     this.query = new Query(this.graph);
@@ -32,6 +34,4 @@ export class Graphene {
     addPipeType(this.query, "except", exceptPipeTypeMethod);
     addPipeType(this.query, "back", backPipeTypeMethod);
   }
-  graph: Graph;
-  query: Query;
 }

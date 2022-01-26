@@ -269,5 +269,6 @@ export const backPipeTypeMethod = (_graph: Graph, args: any[],
   : "pull" | IGremlin => {
   if (!gremlin) return "pull";
 
+  // Go to the vertex stored in the "as" label.
   return gotoVertex(gremlin, gremlin.state.as[args[0]]);
 }
