@@ -2,6 +2,7 @@ import { Graph } from "../graph/graph";
 import { IGremlin, IGraphState, vertexType } from "../types/primitives";
 import { grapheneError } from "../utils/error";
 import { filterEdges, gotoVertex, makeGremlin, objectFilter } from "../utils/helpers";
+import { TypePipeMethodResult } from "./types";
 
 /**
  * Given a vertex ID, returns a single new gremlin.
@@ -22,7 +23,7 @@ import { filterEdges, gotoVertex, makeGremlin, objectFilter } from "../utils/hel
  * @returns 
  */
 export const vertexPipeTypeMethod = (graph: Graph, args: any[],
-  gremlin: IGremlin, state: IGraphState): "done" | IGremlin => {
+  gremlin: IGremlin, state: IGraphState): TypePipeMethodResult => {
   if (!state.vertices) {
     // state initialization
     state.vertices = graph.traversal.findVertices(args);
@@ -83,7 +84,7 @@ export const simpleTraversal = (direction: "out" | "in") => {
 }
 
 export const propertyPipeTypeMethod = (_graph: Graph, args: any[],
-  gremlin: IGremlin, _state: IGraphState): boolean | IGremlin | "pull" => {
+  gremlin: IGremlin, _state: IGraphState): TypePipeMethodResult => {
   // no gremlin, so we need to pull (query initialization).
   if (!gremlin) return 'pull';
 
@@ -104,8 +105,7 @@ export const propertyPipeTypeMethod = (_graph: Graph, args: any[],
  * @returns
  */
 export const uniquePipeTypeMethod = (_graph: Graph, _args: any[],
-  gremlin: IGremlin, state: IGraphState)
-  : boolean | IGremlin | "pull" => {
+  gremlin: IGremlin, state: IGraphState): TypePipeMethodResult => {
   // we initialize by trying to collect a gremlin
   if (!gremlin) {
     return "pull";
@@ -135,7 +135,7 @@ export const uniquePipeTypeMethod = (_graph: Graph, _args: any[],
  * @returns 
  */
 export const filterPipeTypeMethod = (_graph: Graph, args: any[],
-  gremlin: IGremlin, _state: IGraphState) => {
+  gremlin: IGremlin, _state: IGraphState): TypePipeMethodResult => {
   if (!gremlin) {
     return "pull";  // query initialization.
   }
@@ -167,8 +167,7 @@ export const filterPipeTypeMethod = (_graph: Graph, args: any[],
  * @returns
  */
 export const takePipeTypeMethod = (_graph: Graph, args: any[],
-  gremlin: IGremlin, state: IGraphState)
-  : "done" | "pull" | IGremlin => {
+  gremlin: IGremlin, state: IGraphState): TypePipeMethodResult => {
   // state initialization
   // we initialize state.taken to zero if it already doesn't exist.
   state.taken = state.taken || 0;
@@ -198,8 +197,7 @@ export const takePipeTypeMethod = (_graph: Graph, args: any[],
  * @returns 
  */
 export const asPipeTypeMethod = (_graph: Graph, args: any[],
-  gremlin: IGremlin, _state: IGraphState)
-  : "pull" | IGremlin => {
+  gremlin: IGremlin, _state: IGraphState): TypePipeMethodResult => {
   // query initialization.
   if (!gremlin) return "pull";
 
@@ -221,8 +219,7 @@ export const asPipeTypeMethod = (_graph: Graph, args: any[],
  * @returns
  */
 export const mergePipeTypeMethod = (_graph: Graph, args: any[],
-  gremlin: IGremlin, state: IGraphState)
-  : "pull" | IGremlin => {
+  gremlin: IGremlin, state: IGraphState): TypePipeMethodResult => {
   // query initialization.
   if (!state.vertices && !gremlin) return "pull";
 
@@ -248,8 +245,7 @@ export const mergePipeTypeMethod = (_graph: Graph, args: any[],
  * @returns 
  */
 export const exceptPipeTypeMethod = (_graph: Graph, args: any[],
-  gremlin: IGremlin, _state: IGraphState)
-  : "pull" | IGremlin => {
+  gremlin: IGremlin, _state: IGraphState): TypePipeMethodResult => {
   // query initialization.
   if (!gremlin) return "pull";
   if (gremlin.vertex == gremlin.state.as[args[0]]) return "pull";
@@ -265,8 +261,7 @@ export const exceptPipeTypeMethod = (_graph: Graph, args: any[],
  * @returns 
  */
 export const backPipeTypeMethod = (_graph: Graph, args: any[],
-  gremlin: IGremlin, _state: IGraphState)
-  : "pull" | IGremlin => {
+  gremlin: IGremlin, _state: IGraphState): TypePipeMethodResult => {
   if (!gremlin) return "pull";
 
   // Go to the vertex stored in the "as" label.
