@@ -17,4 +17,5 @@ export interface IQuery {
   pipe: {
     [key in pipeTypeConstant]?: pipetypeQueryMethod;
   };
+  run: () => any;
 }

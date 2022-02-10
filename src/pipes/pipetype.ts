@@ -1,6 +1,7 @@
 import { Query } from "../query/query";
 import { pipeTypeConstant } from "../query/types/queryTypes";
 import { grapheneError } from "../utils/error";
+import { TypePipeMethod } from "./types";
 
 export const PipeTypes: any = {}
 
@@ -17,7 +18,7 @@ export const addPipeType = (query: Query, name: pipeTypeConstant, fun: Function)
   };
 }
 
-export const getPipeType = (name: pipeTypeConstant) => {
+export const getPipeType = (name: pipeTypeConstant): TypePipeMethod => {
   const pipeType = PipeTypes[name];
 
   if (!pipeType) {
