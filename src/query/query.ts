@@ -1,6 +1,7 @@
 import { Graph } from "../graph/graph";
 import { getPipeType } from "../pipes/pipetype";
 import { TypePipeMethod, TypePipeMethodResult } from "../pipes/types";
+import { transform } from "../transformers/query-transformer";
 import { IGremlin } from "../types/primitives";
 import { IQuery, pipeTypeConstant, pipetypeQueryMethod, stepType } from "./types/queryTypes";
 
@@ -40,6 +41,9 @@ export class Query implements IQuery {
 
   // A machine for query processing.
   run = () => {
+    // Activate the transformers.
+    this.program = transform(this.program);
+
     const max: number = this.program.length - 1;  // Index of the last step in the program.
     let maybe_gremlin: TypePipeMethodResult = false;  // A gremlin, a signal string, or false.
     let results: any[] = [];  // Results for this particular run.
