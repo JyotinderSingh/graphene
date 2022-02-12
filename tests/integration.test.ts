@@ -60,7 +60,7 @@ describe("Integration Tests", () => {
       expect(out).to.contain(getAesir('Thor'))
     })
 
-    it("g.v({species: 'Aesir'}) should be all Aesir", () => {
+    it("g.query.v({species: 'Aesir'}) should be all Aesir", () => {
       var out = g.query.v({ species: 'Aesir' }).run()
       expect(out).to.have.lengthOf(aesir_count)
       out.forEach(function (node) {
