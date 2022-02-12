@@ -1,5 +1,5 @@
 import { Query } from "../query/query";
-import { pipeTypeConstant } from "../query/types/queryTypes";
+import { pipeTypeConstant, TypeStepArguments } from "../query/types/queryTypes";
 import { grapheneError } from "../utils/error";
 import { TypePipeMethod } from "./types";
 
@@ -10,9 +10,10 @@ export const PipeTypes: any = {}
  * Every pipeType must have a corresponding Query Method. That method adds a new
  * step to the query program, along with the given arguments.
  */
-export const addPipeType = (query: Query, name: pipeTypeConstant, fun: Function) => {
+export const addPipeType = (query: Query, name: pipeTypeConstant,
+  fun: TypePipeMethod | Function) => {
   PipeTypes[name] = fun;
-  query.pipe[name] = (...args: any[]) => {
+  query.pipe[name] = (...args: TypeStepArguments) => {
     // capture pipeType and args.
     return query.add(name, [...args]);
   };

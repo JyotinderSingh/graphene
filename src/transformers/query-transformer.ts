@@ -1,9 +1,8 @@
-import { stepType } from "../query/types/queryTypes";
+import { stepType, TypeStepArguments } from "../query/types/queryTypes";
 import { grapheneError } from "../utils/error";
 import { TypeTransformer } from "./types";
 
-// Transformers
-export const T: TypeTransformer[] = [];
+export const T: TypeTransformer[] = [];  // Transformers
 
 export const addTransformer = (fun: Function, priority: number)
   : void | false => {
@@ -29,4 +28,12 @@ export const transform = (program: stepType[]): stepType[] => {
   return T.reduce((prev, transformer) => {
     return transformer.fun(prev)
   }, program)
+}
+
+export const extend = (list: TypeStepArguments, defaults: any[]) => {
+  return Object.keys(defaults).reduce((acc, key) => {
+    if (typeof list[parseInt(key)] != "undefined") return acc;
+    acc[parseInt(key)] = defaults[parseInt(key)];
+    return acc;
+  }, list)
 }

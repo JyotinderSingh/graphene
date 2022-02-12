@@ -1,4 +1,5 @@
 import { Query } from "../query/query";
+import { TypeStepArguments } from "../query/types/queryTypes";
 import {
   IGraph, verticesType, vertexType, edgesType, vertexIndexType, edgeType, vertexIdType, edgeBuilderType
 } from "../types/primitives";
@@ -147,7 +148,7 @@ export class Graph implements IGraph {
   v = (...args: any[]) => {
     // Initialize a new query.
     const query = new Query(this);
-    query.add("vertex", [...args]);
+    query.add("vertex", [...args as TypeStepArguments]);
     return query;
   }
 }

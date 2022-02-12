@@ -3,7 +3,7 @@ import { getPipeType } from "../pipes/pipetype";
 import { TypePipeMethod, TypePipeMethodResult } from "../pipes/types";
 import { transform } from "../transformers/query-transformer";
 import { IGremlin } from "../types/primitives";
-import { IQuery, pipeTypeConstant, pipetypeQueryMethod, stepType } from "./types/queryTypes";
+import { IQuery, pipeTypeConstant, pipetypeQueryMethod, stepType, TypeStepArguments } from "./types/queryTypes";
 
 export class Query implements IQuery {
   graph: Graph;  // the graph itself
@@ -31,7 +31,7 @@ export class Query implements IQuery {
     this.pipe = {};
   }
 
-  add = (pipeType: pipeTypeConstant, args: any[]): Query => {
+  add = (pipeType: pipeTypeConstant, args: TypeStepArguments): Query => {
     // A step is pair of a pipeType function and its arguments.
     const step: stepType = [pipeType, args];
     // Add the step to the program.
