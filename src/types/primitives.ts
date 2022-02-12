@@ -36,12 +36,12 @@ export interface IGraph {
   addEdges: (edges: edgesType) => void,
   addVertex: (vertex: vertexType) => number | string | boolean,
   addEdge: (edge: edgeType) => void | boolean,
-  traversal: {
-    findVertexById: (id: number | number) => vertexType | undefined,
-    findInEdges: (vertex: vertexType) => edgesType,
-    findOutEdges: (vertex: vertexType) => edgesType,
-  }
-  // [x: string | number | symbol]: unknown;
+
+  findVertexById: (id: number | number) => vertexType | undefined,
+  findInEdges: (vertex: vertexType) => edgesType,
+  findOutEdges: (vertex: vertexType) => edgesType,
+
+  // [x: string]: unknown;
 }
 
 export interface IGremlin {

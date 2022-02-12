@@ -67,3 +67,5 @@ export class Graphene {
     }, 100);  // priority: 100, because aliases run early.
   }
 }
+
+export default Graphene;

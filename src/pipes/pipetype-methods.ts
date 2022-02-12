@@ -26,7 +26,7 @@ export const vertexPipeTypeMethod: TypePipeMethod = (graph: Graph, args: any[],
   gremlin: IGremlin, state: IGraphState) => {
   if (!state.vertices) {
     // state initialization
-    state.vertices = graph.traversal.findVertices(args);
+    state.vertices = graph.findVertices(args);
   }
 
   if (!state?.vertices?.length) {
@@ -65,7 +65,7 @@ export const simpleTraversal = (direction: "out" | "in") => {
       // state initialization.
       state.gremlin = gremlin;
       // Get matching edges.
-      state.edges = graph.traversal[find_method](gremlin.vertex)
+      state.edges = graph[find_method](gremlin.vertex)
         .filter(filterEdges(args[0]));
     }
 

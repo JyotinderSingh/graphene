@@ -10,11 +10,19 @@
   "scripts": {
     "run": "node dist/graphene.js",
     "build": "rm -rf dist && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' cd tests && mocha -w --parallel -r ts-node/register ./tests/**/*.ts"
   },
   "author": "Jyotinder Singh",
   "license": "MIT",
   "dependencies": {
     "typescript": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^9.1.0",
+    "chai": "^4.3.6",
+    "mocha": "^9.2.0",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.5.0"
   }
 }
