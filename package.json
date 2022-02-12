@@ -10,7 +10,7 @@
   "scripts": {
     "run": "node dist/graphene.js",
     "build": "rm -rf dist && tsc",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' cd tests && mocha -w --parallel -r ts-node/register ./tests/**/*.ts"
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' cd tests && mocha --parallel -r ts-node/register ./tests/**/*.ts"
   },
   "author": "Jyotinder Singh",
   "license": "MIT",

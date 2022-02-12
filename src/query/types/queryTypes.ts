@@ -16,8 +16,6 @@ export interface IQuery {
   state: any[];
   program: stepType[];
   add: (pipeType: pipeTypeConstant, args: TypeStepArguments) => Query;
-  pipe: {
-    [key in pipeTypeConstant]?: pipetypeQueryMethod;
-  };
   run: () => any;
+  [x: string]: any;
 }

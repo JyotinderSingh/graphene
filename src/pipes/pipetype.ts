@@ -13,7 +13,7 @@ export const PipeTypes: any = {}
 export const addPipeType = (query: Query, name: pipeTypeConstant,
   fun: TypePipeMethod | Function) => {
   PipeTypes[name] = fun;
-  query.pipe[name] = (...args: TypeStepArguments) => {
+  query[name] = (...args: TypeStepArguments) => {
     // capture pipeType and args.
     return query.add(name, [...args]);
   };

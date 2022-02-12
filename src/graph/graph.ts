@@ -1,5 +1,3 @@
-import { Query } from "../query/query";
-import { TypeStepArguments } from "../query/types/queryTypes";
 import {
   IGraph, verticesType, vertexType, edgesType, vertexIndexType, edgeType, vertexIdType, edgeBuilderType
 } from "../types/primitives";
@@ -111,7 +109,7 @@ export class Graph implements IGraph {
     }
   }
 
-  findVerticesByIds = (ids: number[]): verticesType => {
+  findVerticesByIds = (ids: vertexIdType[]): verticesType => {
     if (ids.length == 1) {
       // maybe its a vertex.
       const maybe_vertex = this.findVertexById(ids[0]);
@@ -135,17 +133,4 @@ export class Graph implements IGraph {
 
   }
 
-  /**
-   * Builds a new query, then uses the vertex pipeType.
-   * NOTE: Check if this works properly, otherwise convert to non arrow 
-   * function.
-   * @param args 
-   * @returns 
-   */
-  v = (...args: any[]) => {
-    // Initialize a new query.
-    const query = new Query(this);
-    query.add("vertex", [...args as TypeStepArguments]);
-    return query;
-  }
 }

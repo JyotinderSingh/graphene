@@ -6,8 +6,8 @@ import { IGremlin } from "../types/primitives";
 import { IQuery, pipeTypeConstant, pipetypeQueryMethod, stepType, TypeStepArguments } from "./types/queryTypes";
 
 export class Query implements IQuery {
+  [x: string | pipeTypeConstant]: any | pipetypeQueryMethod;
   graph: Graph;  // the graph itself
-  pipe: { [key in pipeTypeConstant]?: pipetypeQueryMethod };
 
   /** each step in our program can have state.
    * This state is a list of per-step states that the index correlates with a
@@ -109,5 +109,17 @@ export class Query implements IQuery {
     })
 
     return results;
+  }
+
+  /**
+  * Builds a new query, then uses the vertex pipeType.
+  * @param args 
+  * @returns 
+  */
+  v = (...args: any[]): Query => {
+    // Initialize a new query.
+    // const query = new Query(this);
+    this.add("vertex", [...args as TypeStepArguments]);
+    return this;
   }
 }
