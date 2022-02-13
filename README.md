@@ -8,11 +8,17 @@ Graphene presents an idiomatic and intuitive API to build and query graphs, some
 
 | Table of Contents                             |
 | --------------------------------------------- |
+| [Installation](#installation)                 |
 | [Basic API](#basic-api)                       |
 | [Advanced Usage](#queries-and-advanced-usage) |
 | [Serialization](#serialization)               |
 | [Scripts](#scripts)                           |
 | [Tests](./tests)                              |
+
+## Installation
+```bash
+npm i @jyotinder/graphene
+```
 
 ## Basic API
 
