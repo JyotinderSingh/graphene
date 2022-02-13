@@ -288,5 +288,180 @@ describe("Integration Tests", () => {
         getAesir("Thor"),
       ]);
     });
+
+    it("children then parents", () => {
+      const out1 = g.query.v("Thor").children().parents().run();
+      expect(out1).to.deep.equal([
+        getAesir("Járnsaxa"),
+        getAesir("Thor"),
+        getAesir("Sif"),
+        getAesir("Thor"),
+        getAesir("Sif"),
+        getAesir("Thor"),
+      ]);
+    });
+
+    it("siblings alias", () => {
+      g.addAlias("siblings", [
+        ["as", "me"],
+        ["out", "parent"],
+        ["in", "parent"],
+        ["except", "me"],
+      ]);
+      const out1 = g.query.v("Magni").siblings().run();
+      expect(out1).to.deep.equal([getAesir("Þrúðr"), getAesir("Móði")]);
+    });
+
+    it("grandparents alias", () => {
+      g.addAlias("grandparents", [
+        ["out", "parent"],
+        ["out", "parent"],
+      ]);
+      const out1 = g.query.v("Magni").grandparents().run();
+      expect(out1).to.deep.equal([getAesir("Odin"), getAesir("Jörð")]);
+    });
+
+    it("cousins alias", () => {
+      g.addAlias("cousins", [
+        ["out", "parent"],
+        ["as", "folks"],
+        ["out", "parent"],
+        ["in", "parent"],
+        ["except", "folks"],
+        ["in", "parent"],
+        ["unique"],
+      ]);
+      const out1 = g.query.v("Magni").cousins().run();
+      expect(out1).to.deep.equal([getAesir("Forseti")]);
+    });
+
+    it("manual cousins", () => {
+      const out1 = g.query
+        .v("Magni")
+        .parents()
+        .as("parents")
+        .parents()
+        .children()
+        .except("parents") // do not include Magni's parents
+        .children()
+        .unique()
+        .run();
+      expect(out1).to.deep.equal([getAesir("Forseti")]);
+    });
+
+    it("more cousins", () => {
+      const out1 = g.query.v("Forseti").cousins().run();
+      expect(out1).to.deep.equal([
+        getAesir("Magni"),
+        getAesir("Þrúðr"),
+        getAesir("Móði"),
+      ]);
+    });
+
+    it("Odin's grandkids", () => {
+      const q = g.query.v("Odin").children().children().take(2);
+      expect(q.run()).to.deep.equal([getAesir("Magni"), getAesir("Þrúðr")]);
+    });
+
+    it("sons alias", () => {
+      g.addAlias("sons", [
+        ["in", "parent"],
+        ["filter", { gender: "male" }],
+      ]);
+      const out = g.query.v("Thor").sons().run();
+      expect(out).to.deep.equal([getAesir("Magni"), getAesir("Móði")]);
+    });
+
+    it("daughters alias", () => {
+      g.addAlias("daughters", [
+        ["in", "parent"],
+        ["filter", { gender: "female" }],
+      ]);
+      const out = g.query.v("Thor").daughters().run();
+      expect(out).to.deep.equal([getAesir("Þrúðr")]);
+    });
+
+    it("Fjörgynn's daughters who have children with Bestla's sons", () => {
+      // as it originally appeared, modified to work with our data model
+      const out = g.query
+        .v("Fjörgynn")
+        .daughters()
+        .as("me")
+        .in()
+        .out()
+        .out()
+        .filter({ _id: "Bestla" })
+        .back("me")
+        .unique()
+        .run();
+
+      expect(out).to.deep.equal([getAesir("Frigg")]);
+    });
+
+    it("Fjörgynn's daughters who have children with Bestla's sons", () => {
+      // final book version
+      const out = g.query
+        .v("Fjörgynn")
+        .in()
+        .as("me") // first gremlin's state.as is Frigg
+        .in() // first gremlin's vertex is now Baldr
+        .out()
+        .out() // make a clone of that gremlin for each grandparent
+        .filter({ _id: "Bestla" }) // keep only the gremlin on grandparent Bestla
+        .back("me")
+        .unique()
+        .run(); // jump the gremlin's vertex back to Frigg and exit
+
+      expect(out).to.deep.equal([getAesir("Frigg")]);
+    });
+
+    it("no edge filter", () => {
+      g.graph.addEdge({
+        _label: "spouse",
+        _out: "Frigg",
+        _in: "Odin",
+        order: 1,
+      });
+      g.graph.addEdge({
+        _label: "spouse",
+        _out: "Jörð",
+        _in: "Odin",
+        order: 2,
+      });
+      g.graph.addEdge({
+        _label: "owner",
+        _out: "Fenrir",
+        _in: "Odin",
+        order: 2,
+      });
+      const out = g.query.v("Odin").in().run();
+      expect(out).to.deep.equal([
+        getAesir("Fenrir"),
+        getAesir("Jörð"),
+        getAesir("Frigg"),
+        getAesir("Thor"),
+        getAesir("Baldr"),
+      ]);
+    });
+
+    it("string edge filter", () => {
+      const out = g.query.v("Odin").in("parent").run();
+      expect(out).to.deep.equal([getAesir("Thor"), getAesir("Baldr")]);
+    });
+
+    it("array edge filter", () => {
+      const out = g.query.v("Odin").in(["parent", "spouse"]).run();
+      expect(out).to.deep.equal([
+        getAesir("Jörð"),
+        getAesir("Frigg"),
+        getAesir("Thor"),
+        getAesir("Baldr"),
+      ]);
+    });
+
+    it("object edge filter", () => {
+      const out = g.query.v("Odin").in({ _label: "spouse", order: 2 }).run();
+      expect(out).to.deep.equal([getAesir("Jörð")]);
+    });
   });
 });

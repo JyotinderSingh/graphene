@@ -62,10 +62,10 @@ g.query.v().run();
 let output = g.query.v({ species: "Aesir" }).run();
 
 // Find all copies of thor and his wives.
-out = g.query.v("Thor").in().out().run();
+output = g.query.v("Thor").in().out().run();
 
 // Gathering ancestors upto three generations back.
-out = g.query
+output = g.query
   .v("Thor")
   .out()
   .as("parent") // label as parent.
@@ -75,4 +75,21 @@ out = g.query
   .as("great-grandparent") // label as great-grandparent.
   .merge("parent", "grandparent", "great-grandparent")
   .run();
+
+// You can also add aliases for different operations, to customize the API
+// according to your usecase and add custom logic.
+g.addAlias("parents", [["out", "parent"]]);
+g.addAlias("children", [["in", "parent"]]);
+// parents then children.
+output = g.query.v("Thor").parents().children().run();
+
+// siblings alias
+g.addAlias("siblings", [
+  ["as", "me"],
+  ["out", "parent"],
+  ["in", "parent"],
+  ["except", "me"],
+]);
+// Magni's siblings
+output = g.query.v("Magni").siblings().run();
 ```
