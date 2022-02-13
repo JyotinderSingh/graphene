@@ -76,10 +76,27 @@ output = g.query
   .merge("parent", "grandparent", "great-grandparent")
   .run();
 
-// You can also add aliases for different operations, to customize the API
-// according to your usecase and add custom logic.
+/**
+ * You can also add aliases for different operations,
+ * to customize the API according to your usecase and add custom logic.
+ * The first argument is the name of the alias.
+ * The second argument is the custom logic - which is
+ * the program that would be substituted in place of the
+ * alias. This is a list of lists, each inner list is a step
+ * in the program. The first element is the function to be called,
+ * the second element is the argument to be pased to it (if any).
+ *
+ * A 'parents' call would equate to .out("parent") call.
+ * this means finding all the out-vertices with the label "parent".
+ **/
 g.addAlias("parents", [["out", "parent"]]);
+
+/**
+ * A 'children' call would equate to .in("parent") call.
+ * This means finding all the in-vertices with the label "parent".
+ **/
 g.addAlias("children", [["in", "parent"]]);
+
 // parents then children.
 output = g.query.v("Thor").parents().children().run();
 
@@ -90,6 +107,7 @@ g.addAlias("siblings", [
   ["in", "parent"],
   ["except", "me"],
 ]);
+
 // Magni's siblings
 output = g.query.v("Magni").siblings().run();
 ```
