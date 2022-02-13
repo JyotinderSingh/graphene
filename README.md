@@ -6,6 +6,13 @@ Graphene is a plug-n-play in-memory graph database supporting a myriad of operat
 
 Graphene presents an idiomatic and intuitive API to build and query graphs, some examples are given below.
 
+| Table of Contents                             |
+| --------------------------------------------- |
+| [Basic API](#basic-api)                       |
+| [Advanced Usage](#queries-and-advanced-usage) |
+| [Scripts](#scripts)                           |
+| [Tests](./tests)                              |
+
 ## Basic API
 
 ```typescript
@@ -84,7 +91,7 @@ output = g.query
  * the program that would be substituted in place of the
  * alias. This is a list of lists, each inner list is a step
  * in the program. The first element is the function to be called,
- * the second element is the argument to be pased to it (if any).
+ * the second element is the argument to be passed to it (if any).
  *
  * A 'parents' call would equate to .out("parent") call.
  * this means finding all the out-vertices with the label "parent".
@@ -110,4 +117,33 @@ g.addAlias("siblings", [
 
 // Magni's siblings
 output = g.query.v("Magni").siblings().run();
+```
+
+## Scripts
+
+Running the tests
+
+```bash
+# Runs linter + prettier formatting as well
+npm test
+```
+
+ESLint
+
+```bash
+npm run lint
+# in case you want to fix auto-fixable lint errors
+npm run lint -- --fix
+```
+
+Prettier
+
+```bash
+npm run format
+```
+
+Building the package
+
+```bash
+npm run build
 ```
