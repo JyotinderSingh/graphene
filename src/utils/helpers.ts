@@ -9,7 +9,7 @@ import { edgeType, IGremlin, vertexType } from "../types/primitives";
  */
 export const makeGremlin = (vertex: vertexType, state: any): IGremlin => {
   return { vertex: vertex, state: state || {} };
-}
+};
 
 /**
  * Take an existing gremlin and send it to a new vertex.
@@ -23,7 +23,7 @@ export const makeGremlin = (vertex: vertexType, state: any): IGremlin => {
 export const gotoVertex = (gremlin: IGremlin, vertex: vertexType): IGremlin => {
   // clone the gremlin.
   return makeGremlin(vertex, gremlin.state);
-}
+};
 
 export const filterEdges = (filter: any) => {
   return (edge: edgeType): boolean => {
@@ -42,12 +42,12 @@ export const filterEdges = (filter: any) => {
 
     // object filter: check edge keys.
     return objectFilter(edge, filter);
-  }
-}
+  };
+};
 
 export const objectFilter = (thing: any, filter: any): boolean => {
-  for (let key in filter) {
+  for (const key in filter) {
     if (thing[key] !== filter[key]) return false;
   }
   return true;
-}
+};

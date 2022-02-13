@@ -38,7 +38,7 @@ export const vertexPipeTypeMethod: TypePipeMethod = (graph: Graph, args: any[],
 
   // gremlins from as/back queries.
   return makeGremlin(vertex, gremlin.state);
-}
+};
 
 
 /**
@@ -80,19 +80,19 @@ export const simpleTraversal = (direction: "out" | "in") => {
     // vertex to which it points.
     const vertex = (state.edges as any).pop()[edge_list]; // use up an edge.
     return gotoVertex(state.gremlin!, vertex);
-  }
-}
+  };
+};
 
 export const propertyPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
   gremlin: IGremlin, _state: IGraphState) => {
   // no gremlin, so we need to pull (query initialization).
-  if (!gremlin) return 'pull';
+  if (!gremlin) return "pull";
 
   // If there is a gremlin, we'll set its result to the property's value.
   gremlin.result = gremlin.vertex[args[0]];
 
   return gremlin.result == null ? false : gremlin;  // false for bad props.
-}
+};
 
 /**
  * A unique pipeType is purely a filter: it either passes the germlin 
@@ -114,15 +114,15 @@ export const uniquePipeTypeMethod: TypePipeMethod = (_graph: Graph, _args: any[]
   // if the gremlin's vertex is in our cache, then we've seen it before -
   // so we try to collect a new one.
   if (state[gremlin.vertex._id as number]) {
-    return "pull"
+    return "pull";
   }
 
   // if we've gotten here, then we've seen it for the first time. We add
   // this gremlin's current vertex to our cache and pass it through.
   state[gremlin.vertex._id as number] = true;
 
-  return gremlin
-}
+  return gremlin;
+};
 
 /**
  * Can take in an object or a function to filter the gremlins.
@@ -155,7 +155,7 @@ export const filterPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
 
   // gremlin passed.
   return gremlin;
-}
+};
 
 /**
  * Used to return a handfull of results at a time. Returns a specified
@@ -186,7 +186,7 @@ export const takePipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
   state.taken++;
 
   return gremlin;
-}
+};
 
 /**
  * Allows you to label the current vertex.
@@ -206,7 +206,7 @@ export const asPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
   // set label to vertex.
   gremlin.state.as[args[0]] = gremlin.vertex;
   return gremlin;
-}
+};
 
 /**
  * Maps over each argument, looking for it in the gremlin's list of labeled
@@ -234,7 +234,7 @@ export const mergePipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
 
   const vertex = state.vertices.pop();
   return makeGremlin(vertex as vertexType, gremlin.state);
-}
+};
 
 /**
  * Check whether the current vertex is equal to the one saved in the "as" label.
@@ -250,7 +250,7 @@ export const exceptPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
   if (!gremlin) return "pull";
   if (gremlin.vertex == gremlin.state.as[args[0]]) return "pull";
   return gremlin;
-}
+};
 
 /**
  * 
@@ -266,4 +266,4 @@ export const backPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
 
   // Go to the vertex stored in the "as" label.
   return gotoVertex(gremlin, gremlin.state.as[args[0]]);
-}
+};

@@ -9,127 +9,127 @@ import {
   loadVanir,
   relationships,
   vanir
-} from "./datasets"
+} from "./datasets";
 
 describe("Integration Tests", () => {
-  let aesir_count = 0
+  let aesir_count = 0;
   let vanir_count = 0;
-  let g = new Graphene(null, null);
+  const g = new Graphene(null, null);
   describe("Construct a graph", () => {
     it("should build an empty graph", () => {
-      expect(g).to.be.an("object")
+      expect(g).to.be.an("object");
       expect(g.graph.edges).to.have.lengthOf(0);
       expect(g.graph.vertices).to.have.lengthOf(0);
     });
 
     it("should add the Aesir dataset", () => {
       loadAesir(g);
-      aesir_count = aesir.length
+      aesir_count = aesir.length;
       expect(g.graph.edges).to.have.lengthOf(0);
       expect(g.graph.vertices).to.have.lengthOf(aesir_count);
     });
 
-    it('should add the Vanir dataset', () => {
+    it("should add the Vanir dataset", () => {
       loadVanir(g);
-      vanir_count = vanir.length
-      expect(g.graph.edges).to.have.lengthOf(0)
-      expect(g.graph.vertices).to.have.lengthOf(aesir_count + vanir_count)
+      vanir_count = vanir.length;
+      expect(g.graph.edges).to.have.lengthOf(0);
+      expect(g.graph.vertices).to.have.lengthOf(aesir_count + vanir_count);
     });
 
-    it('should add some edges', () => {
+    it("should add some edges", () => {
       loadRelationships(g);
-      const edges_count = relationships.length
-      expect(g.graph.edges).to.have.lengthOf(edges_count)
-      expect(g.graph.vertices).to.have.lengthOf(aesir_count + vanir_count)
-    })
+      const edges_count = relationships.length;
+      expect(g.graph.edges).to.have.lengthOf(edges_count);
+      expect(g.graph.vertices).to.have.lengthOf(aesir_count + vanir_count);
+    });
   });
 
   describe("Queries in the graph", () => {
-    const getAesir = (name: string) => g.query.v(name).run()[0]
+    const getAesir = (name: string) => g.query.v(name).run()[0];
 
     it("g.query.v('Thor') should be Thor", () => {
-      const out = g.query.v('Thor').run()
-      const thor = out[0]
-      expect(thor._id).to.equal('Thor')
-      expect(thor.species).to.equal('Aesir')
-    })
+      const out = g.query.v("Thor").run();
+      const thor = out[0];
+      expect(thor._id).to.equal("Thor");
+      expect(thor.species).to.equal("Aesir");
+    });
 
     it("g.query.v('Thor', 'Odin') should be Thor and Odin", () => {
-      const out = g.query.v('Thor', 'Odin').run()
-      expect(out).to.have.lengthOf(2)
-      expect(out).to.contain(getAesir('Odin'))
-      expect(out).to.contain(getAesir('Thor'))
-    })
+      const out = g.query.v("Thor", "Odin").run();
+      expect(out).to.have.lengthOf(2);
+      expect(out).to.contain(getAesir("Odin"));
+      expect(out).to.contain(getAesir("Thor"));
+    });
 
     it("g.query.v({species: 'Aesir'}) should be all Aesir", () => {
-      const out = g.query.v({ species: 'Aesir' }).run()
-      expect(out).to.have.lengthOf(aesir_count)
+      const out = g.query.v({ species: "Aesir" }).run();
+      expect(out).to.have.lengthOf(aesir_count);
       out.forEach((node) => {
-        expect(node).to.have.property('species', 'Aesir')
-      })
-    })
+        expect(node).to.have.property("species", "Aesir");
+      });
+    });
 
     it("g.query.v() should be all Aesir and Vanir", () => {
-      const out = g.query.v().run()
-      expect(out).to.have.lengthOf(aesir_count + vanir_count)
-    })
+      const out = g.query.v().run();
+      expect(out).to.have.lengthOf(aesir_count + vanir_count);
+    });
 
 
     it("g.query.v('Thor').in().out() should contain several copies of Thor, and his wives", () => {
-      const out = g.query.v('Thor').in().out().run()
-      expect(out).to.contain(getAesir('Járnsaxa'))
-      expect(out).to.contain(getAesir('Sif'))
-      expect(out).to.contain(getAesir('Thor'))
+      const out = g.query.v("Thor").in().out().run();
+      expect(out).to.contain(getAesir("Járnsaxa"));
+      expect(out).to.contain(getAesir("Sif"));
+      expect(out).to.contain(getAesir("Thor"));
 
-      const out2 = g.query.v('Thor').out().in().unique().run()
-      expect(out2).to.contain(getAesir('Thor'))
+      const out2 = g.query.v("Thor").out().in().unique().run();
+      expect(out2).to.contain(getAesir("Thor"));
 
-      const diff = out.length - out2.length
-      expect(diff).to.be.above(0)
-    })
+      const diff = out.length - out2.length;
+      expect(diff).to.be.above(0);
+    });
 
     it("g.query.v('Thor').in().in().out().out() should be the empty array, because we don't know Thor's grandchildren", () => {
-      const out = g.query.v('Thor').in().in().out().out().run()
-      expect(out).to.deep.equal([])
-    })
+      const out = g.query.v("Thor").in().in().out().out().run();
+      expect(out).to.deep.equal([]);
+    });
 
 
     it("g.query.v('Thor').out().in() should contain several copies of Thor, and his sibling", () => {
-      const out = g.query.v('Thor').out().in().run()
-      expect(out).to.contain(getAesir('Baldr'))
-      expect(out).to.contain(getAesir('Thor'))
+      const out = g.query.v("Thor").out().in().run();
+      expect(out).to.contain(getAesir("Baldr"));
+      expect(out).to.contain(getAesir("Thor"));
 
-      const out2 = g.query.v('Thor').out().in().unique().run()
-      expect(out2).to.contain(getAesir('Thor'))
+      const out2 = g.query.v("Thor").out().in().unique().run();
+      expect(out2).to.contain(getAesir("Thor"));
 
-      const diff = out.length - out2.length
-      expect(diff).to.be.above(0)
-    })
+      const diff = out.length - out2.length;
+      expect(diff).to.be.above(0);
+    });
 
     it("filter functions should filter", () => {
-      const out = g.query.v('Thor').out().in().unique()
-        .filter((asgardian: vertexType) => { return asgardian._id != 'Thor' })
-        .run()
-      expect(out).to.contain(getAesir('Baldr'))
-      expect(out).to.not.contain(getAesir('Thor'))
-      expect(out).to.have.lengthOf(1)
-    })
+      const out = g.query.v("Thor").out().in().unique()
+        .filter((asgardian: vertexType) => { return asgardian._id != "Thor"; })
+        .run();
+      expect(out).to.contain(getAesir("Baldr"));
+      expect(out).to.not.contain(getAesir("Thor"));
+      expect(out).to.have.lengthOf(1);
+    });
 
-    it('property works like a map', () => {
-      const out1 = g.query.v('Thor').out('parent').out('parent').run()
-        .map((vertex: vertexType) => { return vertex._id })
-      const out2 = g.query.v('Thor').out('parent').out('parent').property('_id')
-        .run()
-      expect(out1).to.deep.equal(out2)
-    })
+    it("property works like a map", () => {
+      const out1 = g.query.v("Thor").out("parent").out("parent").run()
+        .map((vertex: vertexType) => { return vertex._id; });
+      const out2 = g.query.v("Thor").out("parent").out("parent").property("_id")
+        .run();
+      expect(out1).to.deep.equal(out2);
+    });
 
     /// ALIASES
 
     it("parents alias", () => {
-      g.addAlias('parents', [['out', 'parent']])
-      const out1 = g.query.v('Thor').parents().property('_id').run()
-      const out2 = g.query.v("Thor").out('parent').property('_id').run()
-      expect(out1).to.deep.equal(out2)
-    })
-  })
+      g.addAlias("parents", [["out", "parent"]]);
+      const out1 = g.query.v("Thor").parents().property("_id").run();
+      const out2 = g.query.v("Thor").out("parent").property("_id").run();
+      expect(out1).to.deep.equal(out2);
+    });
+  });
 });

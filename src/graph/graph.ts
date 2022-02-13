@@ -21,7 +21,7 @@ export class Graph implements IGraph {
 
   addVertices = (vs: verticesType) => {
     vs.forEach(this.addVertex);
-  }
+  };
 
   addEdges = (es: edgesType) => {
     es.forEach(this.addEdge);
@@ -47,22 +47,22 @@ export class Graph implements IGraph {
     vertex._in = [];
 
     return vertex._id;
-  }
+  };
 
   addEdge = (edge: edgeBuilderType): void | boolean => {
     edge._in = this.findVertexById(edge._in as vertexIdType);
     edge._out = this.findVertexById(edge._out as vertexIdType);
 
     if (!(edge._in && edge._out)) {
-      return grapheneError("That edge's " + (edge._in ? 'out' : 'in')
-        + " vertex wasn't found")
+      return grapheneError("That edge's " + (edge._in ? "out" : "in")
+        + " vertex wasn't found");
     }
 
     edge._out._out?.push(edge as edgeType);  // edge's out vertex's out edges
     edge._in._in?.push(edge as edgeType);    // edge's in vertex's in edges
 
     this.edges.push(edge as edgeType);
-  }
+  };
 
 
 
@@ -77,7 +77,7 @@ export class Graph implements IGraph {
     } else {
       return undefined;
     }
-  }
+  };
   /**
    * Find all the edges that have the given vertex as their in vertex.
    * @param vertex The vertex to find the in edges for.
@@ -85,7 +85,7 @@ export class Graph implements IGraph {
    */
   findInEdges = (vertex: vertexType): edgesType => {
     return vertex._in as edgesType;
-  }
+  };
   /**
    * Find all the edges that have the given vertex as their out vertex.
    * @param vertex The vertex to find the out edges for.
@@ -94,7 +94,7 @@ export class Graph implements IGraph {
    */
   findOutEdges = (vertex: vertexType): edgesType => {
     return vertex._out as edgesType;
-  }
+  };
 
   /**
    * Vertex finder helper function.
@@ -107,7 +107,7 @@ export class Graph implements IGraph {
     } else {
       return this.findVerticesByIds(args);
     }
-  }
+  };
 
   findVerticesByIds = (ids: vertexIdType[]): verticesType => {
     if (ids.length == 1) {
@@ -119,7 +119,7 @@ export class Graph implements IGraph {
 
     return ids.map((id) => this.findVertexById(id) as vertexType)
       .filter(Boolean);
-  }
+  };
 
   /**
    * Return vertices matching the filter.
@@ -129,8 +129,8 @@ export class Graph implements IGraph {
   searchVertices = (filter: any) => {
     return this.vertices.filter((vertex) => {
       return objectFilter(vertex, filter);
-    })
+    });
 
-  }
+  };
 
 }

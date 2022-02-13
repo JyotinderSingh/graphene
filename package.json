@@ -10,7 +10,8 @@
   "scripts": {
     "run": "node dist/graphene.js",
     "build": "rm -rf dist && tsc",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' cd tests && mocha --parallel -r ts-node/register ./tests/**/*.ts"
+    "lint": "eslint --ext .js,.ts .",
+    "test": "npm run lint && env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' cd tests && mocha --parallel -r ts-node/register ./tests/**/*.ts"
   },
   "author": "Jyotinder Singh",
   "license": "MIT",
@@ -20,7 +21,10 @@
   "devDependencies": {
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
     "chai": "^4.3.6",
+    "eslint": "^8.9.0",
     "mocha": "^9.2.0",
     "nodemon": "^2.0.15",
     "ts-node": "^10.5.0"

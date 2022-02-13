@@ -37,7 +37,7 @@ export class Query implements IQuery {
     // Add the step to the program.
     this.program.push(step);
     return this;
-  }
+  };
 
   // A machine for query processing.
   run = () => {
@@ -47,7 +47,7 @@ export class Query implements IQuery {
     const max: number = this.program.length - 1;  // Index of the last step in the program.
     let maybe_gremlin: TypePipeMethodResult = false;  // A gremlin, a signal string, or false.
     let results: any[] = [];  // Results for this particular run.
-    let done: number = -1;  // Pointer behind which things have finished.
+    let done = -1;  // Pointer behind which things have finished.
     let pc: number = max; // Program Counter.
 
     // Cache of information about the current step.
@@ -55,9 +55,9 @@ export class Query implements IQuery {
 
     // Loop through the program.
     while (done < max) {
-      let ts = this.state;
+      const ts = this.state;
       step = this.program[pc];  // A step is a pair of pipeType and args.
-      state = (ts[pc] = ts[pc] || {}) // This step's state must be an object.
+      state = (ts[pc] = ts[pc] || {}); // This step's state must be an object.
       pipetype = getPipeType(step[0]);  // A pipeType is just a function.
 
       maybe_gremlin = pipetype(this.graph, step[1], maybe_gremlin as IGremlin,
@@ -106,10 +106,10 @@ export class Query implements IQuery {
     // return either results (like property("name")) or vertices.
     results = results.map((gremlin: IGremlin) => {
       return gremlin.result != null ? gremlin.result : gremlin.vertex;
-    })
+    });
 
     return results;
-  }
+  };
 
   /**
   * Builds a new query, then uses the vertex pipeType.
@@ -121,5 +121,5 @@ export class Query implements IQuery {
     // const query = new Query(this);
     this.add("vertex", [...args as TypeStepArguments]);
     return this;
-  }
+  };
 }

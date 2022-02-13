@@ -28,8 +28,8 @@ export class Graphene {
     addPipeType(this.query, "vertex", vertexPipeTypeMethod);
     addPipeType(this.query, "out", simpleTraversal("out"));
     addPipeType(this.query, "in", simpleTraversal("in"));
-    addPipeType(this.query, "property", propertyPipeTypeMethod)
-    addPipeType(this.query, "unique", uniquePipeTypeMethod)
+    addPipeType(this.query, "property", propertyPipeTypeMethod);
+    addPipeType(this.query, "unique", uniquePipeTypeMethod);
     addPipeType(this.query, "filter", filterPipeTypeMethod);
     addPipeType(this.query, "take", takePipeTypeMethod);
     addPipeType(this.query, "as", asPipeTypeMethod);
@@ -39,33 +39,33 @@ export class Graphene {
   }
 
   addAlias = (newname: pipeTypeConstant, newprogram: any[]) => {
-    addPipeType(this.query, newname, function () { })
+    addPipeType(this.query, newname, function () { });
     newprogram = newprogram.map((step) => {
-      return [step[0], step.slice(1)]  // [['out', 'parent']] => [['out', ['parent']]]
-    })
+      return [step[0], step.slice(1)];  // [['out', 'parent']] => [['out', ['parent']]]
+    });
 
     addTransformer((program: stepType[]) => {
       return program.reduce(function (acc: stepType[], step: stepType) {
-        if (step[0] != newname) return acc.concat([step])
-        return acc.concat(newprogram)
-      }, [])
+        if (step[0] != newname) return acc.concat([step]);
+        return acc.concat(newprogram);
+      }, []);
 
-    }, 100) // these need to run early, so they get a high priority
-  }
+    }, 100); // these need to run early, so they get a high priority
+  };
 
   _legacy_addAlias = (newName: string, oldName: string,
     defaults: any[] | null | undefined) => {
     defaults = defaults || [];
-    addPipeType(this.query, newName, () => { })
+    addPipeType(this.query, newName, () => { });
     addTransformer((program: stepType[]) => {
       return program.map((step: stepType) => {
         // If the name of this step is not the new name, return it as it is.
         if (step[0] != newName) return step;
         // otherwise, return a step with the equivalent old name, with the args.
-        return [oldName, extend(step[1], defaults as any[])]
-      })
+        return [oldName, extend(step[1], defaults as any[])];
+      });
     }, 100);  // priority: 100, because aliases run early.
-  }
+  };
 }
 
 export default Graphene;
