@@ -10,7 +10,7 @@ import {
   simpleTraversal,
   takePipeTypeMethod,
   uniquePipeTypeMethod,
-  vertexPipeTypeMethod
+  vertexPipeTypeMethod,
 } from "./pipes/pipetype-methods";
 import { Query } from "./query/query";
 import { pipeTypeConstant, stepType } from "./query/types/queryTypes";
@@ -39,9 +39,9 @@ export class Graphene {
   }
 
   addAlias = (newname: pipeTypeConstant, newprogram: any[]) => {
-    addPipeType(this.query, newname, function () { });
-    newprogram = newprogram.map((step) => {
-      return [step[0], step.slice(1)];  // [['out', 'parent']] => [['out', ['parent']]]
+    addPipeType(this.query, newname, function () {});
+    newprogram = newprogram.map(step => {
+      return [step[0], step.slice(1)]; // [['out', 'parent']] => [['out', ['parent']]]
     });
 
     addTransformer((program: stepType[]) => {
@@ -49,14 +49,16 @@ export class Graphene {
         if (step[0] != newname) return acc.concat([step]);
         return acc.concat(newprogram);
       }, []);
-
     }, 100); // these need to run early, so they get a high priority
   };
 
-  _legacy_addAlias = (newName: string, oldName: string,
-    defaults: any[] | null | undefined) => {
+  _legacy_addAlias = (
+    newName: string,
+    oldName: string,
+    defaults: any[] | null | undefined
+  ) => {
     defaults = defaults || [];
-    addPipeType(this.query, newName, () => { });
+    addPipeType(this.query, newName, () => {});
     addTransformer((program: stepType[]) => {
       return program.map((step: stepType) => {
         // If the name of this step is not the new name, return it as it is.
@@ -64,7 +66,7 @@ export class Graphene {
         // otherwise, return a step with the equivalent old name, with the args.
         return [oldName, extend(step[1], defaults as any[])];
       });
-    }, 100);  // priority: 100, because aliases run early.
+    }, 100); // priority: 100, because aliases run early.
   };
 }
 

@@ -8,7 +8,7 @@ import {
   loadRelationships,
   loadVanir,
   relationships,
-  vanir
+  vanir,
 } from "./datasets";
 
 describe("Integration Tests", () => {
@@ -64,7 +64,7 @@ describe("Integration Tests", () => {
     it("g.query.v({species: 'Aesir'}) should be all Aesir", () => {
       const out = g.query.v({ species: "Aesir" }).run();
       expect(out).to.have.lengthOf(aesir_count);
-      out.forEach((node) => {
+      out.forEach(node => {
         expect(node).to.have.property("species", "Aesir");
       });
     });
@@ -73,7 +73,6 @@ describe("Integration Tests", () => {
       const out = g.query.v().run();
       expect(out).to.have.lengthOf(aesir_count + vanir_count);
     });
-
 
     it("g.query.v('Thor').in().out() should contain several copies of Thor, and his wives", () => {
       const out = g.query.v("Thor").in().out().run();
@@ -93,7 +92,6 @@ describe("Integration Tests", () => {
       expect(out).to.deep.equal([]);
     });
 
-
     it("g.query.v('Thor').out().in() should contain several copies of Thor, and his sibling", () => {
       const out = g.query.v("Thor").out().in().run();
       expect(out).to.contain(getAesir("Baldr"));
@@ -107,8 +105,14 @@ describe("Integration Tests", () => {
     });
 
     it("filter functions should filter", () => {
-      const out = g.query.v("Thor").out().in().unique()
-        .filter((asgardian: vertexType) => { return asgardian._id != "Thor"; })
+      const out = g.query
+        .v("Thor")
+        .out()
+        .in()
+        .unique()
+        .filter((asgardian: vertexType) => {
+          return asgardian._id != "Thor";
+        })
         .run();
       expect(out).to.contain(getAesir("Baldr"));
       expect(out).to.not.contain(getAesir("Thor"));
@@ -116,9 +120,19 @@ describe("Integration Tests", () => {
     });
 
     it("property works like a map", () => {
-      const out1 = g.query.v("Thor").out("parent").out("parent").run()
-        .map((vertex: vertexType) => { return vertex._id; });
-      const out2 = g.query.v("Thor").out("parent").out("parent").property("_id")
+      const out1 = g.query
+        .v("Thor")
+        .out("parent")
+        .out("parent")
+        .run()
+        .map((vertex: vertexType) => {
+          return vertex._id;
+        });
+      const out2 = g.query
+        .v("Thor")
+        .out("parent")
+        .out("parent")
+        .property("_id")
         .run();
       expect(out1).to.deep.equal(out2);
     });

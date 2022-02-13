@@ -10,8 +10,11 @@ export const PipeTypes: any = {};
  * Every pipeType must have a corresponding Query Method. That method adds a new
  * step to the query program, along with the given arguments.
  */
-export const addPipeType = (query: Query, name: pipeTypeConstant,
-  fun: TypePipeMethod | Function) => {
+export const addPipeType = (
+  query: Query,
+  name: pipeTypeConstant,
+  fun: TypePipeMethod | Function
+) => {
   PipeTypes[name] = fun;
   query[name] = (...args: TypeStepArguments) => {
     // capture pipeType and args.

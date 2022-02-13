@@ -1,5 +1,12 @@
 import {
-  IGraph, verticesType, vertexType, edgesType, vertexIndexType, edgeType, vertexIdType, edgeBuilderType
+  IGraph,
+  verticesType,
+  vertexType,
+  edgesType,
+  vertexIndexType,
+  edgeType,
+  vertexIdType,
+  edgeBuilderType,
 } from "../types/primitives";
 import { grapheneError } from "../utils/error";
 import { objectFilter } from "../utils/helpers";
@@ -54,17 +61,16 @@ export class Graph implements IGraph {
     edge._out = this.findVertexById(edge._out as vertexIdType);
 
     if (!(edge._in && edge._out)) {
-      return grapheneError("That edge's " + (edge._in ? "out" : "in")
-        + " vertex wasn't found");
+      return grapheneError(
+        "That edge's " + (edge._in ? "out" : "in") + " vertex wasn't found"
+      );
     }
 
-    edge._out._out?.push(edge as edgeType);  // edge's out vertex's out edges
-    edge._in._in?.push(edge as edgeType);    // edge's in vertex's in edges
+    edge._out._out?.push(edge as edgeType); // edge's out vertex's out edges
+    edge._in._in?.push(edge as edgeType); // edge's in vertex's in edges
 
     this.edges.push(edge as edgeType);
   };
-
-
 
   /**
    * Find a vertex by its ID.
@@ -89,7 +95,7 @@ export class Graph implements IGraph {
   /**
    * Find all the edges that have the given vertex as their out vertex.
    * @param vertex The vertex to find the out edges for.
-   * @returns An array of edges that have the given vertex as their out 
+   * @returns An array of edges that have the given vertex as their out
    * vertex.
    */
   findOutEdges = (vertex: vertexType): edgesType => {
@@ -117,20 +123,17 @@ export class Graph implements IGraph {
       return maybe_vertex ? [maybe_vertex] : [];
     }
 
-    return ids.map((id) => this.findVertexById(id) as vertexType)
-      .filter(Boolean);
+    return ids.map(id => this.findVertexById(id) as vertexType).filter(Boolean);
   };
 
   /**
    * Return vertices matching the filter.
    * @param filter The filter to use.
-   * @returns 
+   * @returns
    */
   searchVertices = (filter: any) => {
-    return this.vertices.filter((vertex) => {
+    return this.vertices.filter(vertex => {
       return objectFilter(vertex, filter);
     });
-
   };
-
 }

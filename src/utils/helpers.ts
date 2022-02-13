@@ -5,7 +5,7 @@ import { edgeType, IGremlin, vertexType } from "../types/primitives";
  * state.
  * @param vertex the current vertex of the gremlin.
  * @param state the local state of the gremlin.
- * @returns 
+ * @returns
  */
 export const makeGremlin = (vertex: vertexType, state: any): IGremlin => {
   return { vertex: vertex, state: state || {} };
@@ -16,9 +16,9 @@ export const makeGremlin = (vertex: vertexType, state: any): IGremlin => {
  * This function returns a brand new gremlin: a clone of the old one, sent to
  * the desired destination. That means a gremlin can sit on a vertex while its
  * clones are sent out to explore other vertices on.
- * @param gremlin the gremlin to send. 
+ * @param gremlin the gremlin to send.
  * @param vertex destination vertex.
- * @returns 
+ * @returns
  */
 export const gotoVertex = (gremlin: IGremlin, vertex: vertexType): IGremlin => {
   // clone the gremlin.

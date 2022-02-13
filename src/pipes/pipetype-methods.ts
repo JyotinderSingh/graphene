@@ -1,14 +1,19 @@
 import { Graph } from "../graph/graph";
 import { IGremlin, IGraphState, vertexType } from "../types/primitives";
 import { grapheneError } from "../utils/error";
-import { filterEdges, gotoVertex, makeGremlin, objectFilter } from "../utils/helpers";
+import {
+  filterEdges,
+  gotoVertex,
+  makeGremlin,
+  objectFilter,
+} from "../utils/helpers";
 import { TypePipeMethod } from "./types";
 
 /**
  * Given a vertex ID, returns a single new gremlin.
- * Given a query it will find all matching vertices, and yield one new 
+ * Given a query it will find all matching vertices, and yield one new
  * gremlin at a time until it has worked its way through all of them.
- * 
+ *
  * We first check to see if we've already gathered matching vertices,
  * otherwise we try to find some. If there are any vertices, we'll pop one
  * off and return a new gremlin sitting on that vertex. Each gremlin can
@@ -20,10 +25,14 @@ import { TypePipeMethod } from "./types";
  * @param args arguments to the pipeType
  * @param gremlin gremlin to use as input
  * @param state state to use for the new gremlin
- * @returns 
+ * @returns
  */
-export const vertexPipeTypeMethod: TypePipeMethod = (graph: Graph, args: any[],
-  gremlin: IGremlin, state: IGraphState) => {
+export const vertexPipeTypeMethod: TypePipeMethod = (
+  graph: Graph,
+  args: any[],
+  gremlin: IGremlin,
+  state: IGraphState
+) => {
   if (!state.vertices) {
     // state initialization
     state.vertices = graph.findVertices(args);
@@ -39,7 +48,6 @@ export const vertexPipeTypeMethod: TypePipeMethod = (graph: Graph, args: any[],
   // gremlins from as/back queries.
   return makeGremlin(vertex, gremlin.state);
 };
-
 
 /**
  * Traverses the graph in the direction specified by the pipeType.
@@ -65,8 +73,9 @@ export const simpleTraversal = (direction: "out" | "in") => {
       // state initialization.
       state.gremlin = gremlin;
       // Get matching edges.
-      state.edges = graph[find_method](gremlin.vertex)
-        .filter(filterEdges(args[0]));
+      state.edges = graph[find_method](gremlin.vertex).filter(
+        filterEdges(args[0])
+      );
     }
 
     // if we have a gremlin but it's current vertex has no appropriate edges,
@@ -83,20 +92,24 @@ export const simpleTraversal = (direction: "out" | "in") => {
   };
 };
 
-export const propertyPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+export const propertyPipeTypeMethod: TypePipeMethod = (
+  _graph: Graph,
+  args: any[],
+  gremlin: IGremlin,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  gremlin: IGremlin, _state: IGraphState) => {
+  _state: IGraphState
+) => {
   // no gremlin, so we need to pull (query initialization).
   if (!gremlin) return "pull";
 
   // If there is a gremlin, we'll set its result to the property's value.
   gremlin.result = gremlin.vertex[args[0]];
 
-  return gremlin.result == null ? false : gremlin;  // false for bad props.
+  return gremlin.result == null ? false : gremlin; // false for bad props.
 };
 
 /**
- * A unique pipeType is purely a filter: it either passes the germlin 
+ * A unique pipeType is purely a filter: it either passes the germlin
  * through unchanged or tries to pull a new gremlin through the previous
  * pipe.
  * @param _graph graph to query
@@ -105,8 +118,12 @@ export const propertyPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[
  * @param state state to use for the new gremlin
  * @returns
  */
-export const uniquePipeTypeMethod: TypePipeMethod = (_graph: Graph, _args: any[],
-  gremlin: IGremlin, state: IGraphState) => {
+export const uniquePipeTypeMethod: TypePipeMethod = (
+  _graph: Graph,
+  _args: any[],
+  gremlin: IGremlin,
+  state: IGraphState
+) => {
   // we initialize by trying to collect a gremlin
   if (!gremlin) {
     return "pull";
@@ -127,19 +144,23 @@ export const uniquePipeTypeMethod: TypePipeMethod = (_graph: Graph, _args: any[]
 
 /**
  * Can take in an object or a function to filter the gremlins.
- * If the filter's first argument is not an object or function, then we 
+ * If the filter's first argument is not an object or function, then we
  * trigger an error, and pass the gremlin along.
  * @param graph graph to query
  * @param args arguments to the pipeType
  * @param gremlin gremlin to use as input
  * @param state state to use for the new gremlin
- * @returns 
+ * @returns
  */
-export const filterPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+export const filterPipeTypeMethod: TypePipeMethod = (
+  _graph: Graph,
+  args: any[],
+  gremlin: IGremlin,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  gremlin: IGremlin, _state: IGraphState) => {
+  _state: IGraphState
+) => {
   if (!gremlin) {
-    return "pull";  // query initialization.
+    return "pull"; // query initialization.
   }
 
   // filter by object
@@ -168,8 +189,12 @@ export const filterPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
  * @param state state to use for the new gremlin
  * @returns
  */
-export const takePipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
-  gremlin: IGremlin, state: IGraphState) => {
+export const takePipeTypeMethod: TypePipeMethod = (
+  _graph: Graph,
+  args: any[],
+  gremlin: IGremlin,
+  state: IGraphState
+) => {
   // state initialization
   // we initialize state.taken to zero if it already doesn't exist.
   state.taken = state.taken || 0;
@@ -196,11 +221,15 @@ export const takePipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
  * @param args arguments to the pipeType
  * @param gremlin gremlin to use as input
  * @param _state state to use for the new gremlin
- * @returns 
+ * @returns
  */
-export const asPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+export const asPipeTypeMethod: TypePipeMethod = (
+  _graph: Graph,
+  args: any[],
+  gremlin: IGremlin,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  gremlin: IGremlin, _state: IGraphState) => {
+  _state: IGraphState
+) => {
   // query initialization.
   if (!gremlin) return "pull";
 
@@ -221,15 +250,19 @@ export const asPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
  * @param state state to use for the new gremlin
  * @returns
  */
-export const mergePipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
-  gremlin: IGremlin, state: IGraphState) => {
+export const mergePipeTypeMethod: TypePipeMethod = (
+  _graph: Graph,
+  args: any[],
+  gremlin: IGremlin,
+  state: IGraphState
+) => {
   // query initialization.
   if (!state.vertices && !gremlin) return "pull";
 
   // state initialization.
   if (!state.vertices || !state.vertices.length) {
     const obj = (gremlin.state || {}).as || {};
-    state.vertices = args.map((id) => obj[id]).filter(Boolean);
+    state.vertices = args.map(id => obj[id]).filter(Boolean);
   }
 
   // done with this batch.
@@ -245,11 +278,15 @@ export const mergePipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
  * @param args arguments to the pipeType
  * @param gremlin gremlin to use as input
  * @param _state state to use for the new gremlin
- * @returns 
+ * @returns
  */
-export const exceptPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+export const exceptPipeTypeMethod: TypePipeMethod = (
+  _graph: Graph,
+  args: any[],
+  gremlin: IGremlin,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  gremlin: IGremlin, _state: IGraphState) => {
+  _state: IGraphState
+) => {
   // query initialization.
   if (!gremlin) return "pull";
   if (gremlin.vertex == gremlin.state.as[args[0]]) return "pull";
@@ -257,16 +294,20 @@ export const exceptPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
 };
 
 /**
- * 
+ *
  * @param _graph graph to query
  * @param args arguments to the pipeType
  * @param gremlin gremlin to use as input
  * @param _state state to use for the new gremlin
- * @returns 
+ * @returns
  */
-export const backPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+export const backPipeTypeMethod: TypePipeMethod = (
+  _graph: Graph,
+  args: any[],
+  gremlin: IGremlin,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  gremlin: IGremlin, _state: IGraphState) => {
+  _state: IGraphState
+) => {
   if (!gremlin) return "pull";
 
   // Go to the vertex stored in the "as" label.

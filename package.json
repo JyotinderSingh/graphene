@@ -11,6 +11,7 @@
     "run": "node dist/graphene.js",
     "build": "rm -rf dist && tsc",
     "lint": "eslint --ext .js,.ts .",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "test": "npm run lint && env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' cd tests && mocha --parallel -r ts-node/register ./tests/**/*.ts"
   },
   "author": "Jyotinder Singh",
@@ -25,8 +26,10 @@
     "@typescript-eslint/parser": "^5.11.0",
     "chai": "^4.3.6",
     "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.3.0",
     "mocha": "^9.2.0",
     "nodemon": "^2.0.15",
+    "prettier": "^2.5.1",
     "ts-node": "^10.5.0"
   }
 }

@@ -2,10 +2,21 @@ import { Graph } from "../../graph/graph";
 import { IGremlin, IGraphState } from "../../types/primitives";
 import { Query } from "../query";
 
-export type pipeTypeConstant = "vertex" | "in" | "out" | "property" | "unique"
-  | "filter" | "take" | "as" | "back" | "except" | "merge" | string;
+export type pipeTypeConstant =
+  | "vertex"
+  | "in"
+  | "out"
+  | "property"
+  | "unique"
+  | "filter"
+  | "take"
+  | "as"
+  | "back"
+  | "except"
+  | "merge"
+  | string;
 
-export type TypeStepArguments = [Graph, any[], IGremlin, IGraphState]
+export type TypeStepArguments = [Graph, any[], IGremlin, IGraphState];
 export type stepType = [pipeTypeConstant, TypeStepArguments];
 
 // Query Method associated with a pipeType.
