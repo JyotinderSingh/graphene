@@ -1,6 +1,6 @@
 {
   "name": "@jyotinder/graphene",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "tiny in-memory graph database",
   "main": "dist/graphene.js",
   "repository": {
