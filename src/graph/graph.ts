@@ -10,6 +10,7 @@ import {
 } from "../types/primitives";
 import { grapheneError } from "../utils/error";
 import { objectFilter } from "../utils/helpers";
+import { jsonifyGraph } from "../utils/serialization";
 
 export class Graph implements IGraph {
   edges: edgesType = [];
@@ -136,4 +137,6 @@ export class Graph implements IGraph {
       return objectFilter(vertex, filter);
     });
   };
+
+  toString = () => jsonifyGraph(this);
 }

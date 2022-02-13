@@ -10,6 +10,7 @@ Graphene presents an idiomatic and intuitive API to build and query graphs, some
 | --------------------------------------------- |
 | [Basic API](#basic-api)                       |
 | [Advanced Usage](#queries-and-advanced-usage) |
+| [Serialization](#serialization)               |
 | [Scripts](#scripts)                           |
 | [Tests](./tests)                              |
 
@@ -117,6 +118,37 @@ g.addAlias("siblings", [
 
 // Magni's siblings
 output = g.query.v("Magni").siblings().run();
+```
+
+## Serialization
+
+Graphene provides easy to use API for disk persistance and serialization tasks.
+
+```typescript
+import {
+  Graphene,
+  persist,
+  depersist,
+  graphFromJSON,
+  jsonifyGraph,
+} from "@jyotinder/graphene";
+
+const g1 = new Graphene(V, E);
+const graphName = "example_graph";
+
+// persist the graph.
+persist(g1.graph, graphName);
+
+// create new graphene instance.
+const g2 = new Graphene(null, null);
+
+// load the persisted graph into the new graphene instance.
+g2.setGraph(depersist(graphName));
+
+// barebones serialization
+const jsonGraph = jsonifyGraph(g1.graph);
+const loadedGraph = graphFromJSON(jsonGraph);
+
 ```
 
 ## Scripts

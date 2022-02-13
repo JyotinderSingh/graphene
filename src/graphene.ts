@@ -15,6 +15,12 @@ import {
 import { Query } from "./query/query";
 import { pipeTypeConstant, stepType } from "./query/types/queryTypes";
 import { addTransformer, extend } from "./transformers/query-transformer";
+import {
+  persist,
+  depersist,
+  graphFromJSON,
+  jsonifyGraph,
+} from "./utils/serialization";
 
 export class Graphene {
   graph: Graph;
@@ -37,6 +43,11 @@ export class Graphene {
     addPipeType(this.query, "except", exceptPipeTypeMethod);
     addPipeType(this.query, "back", backPipeTypeMethod);
   }
+
+  setGraph = (graph: Graph) => {
+    this.graph = graph;
+    this.query = new Query(this.graph);
+  };
 
   addAlias = (newname: pipeTypeConstant, newprogram: any[]) => {
     addPipeType(this.query, newname, function () {});
@@ -69,5 +80,7 @@ export class Graphene {
     }, 100); // priority: 100, because aliases run early.
   };
 }
+
+export { Graph, Query, persist, depersist, graphFromJSON, jsonifyGraph };
 
 export default Graphene;

@@ -1,6 +1,12 @@
 import { expect } from "chai";
 import { describe, it } from "mocha";
-import { Graphene } from "../src/graphene";
+import {
+  depersist,
+  Graphene,
+  persist,
+  jsonifyGraph,
+  graphFromJSON,
+} from "../src/graphene";
 import { vertexType } from "../src/types/primitives";
 import {
   aesir,
@@ -41,6 +47,25 @@ describe("Integration Tests", () => {
       const edges_count = relationships.length;
       expect(g.graph.edges).to.have.lengthOf(edges_count);
       expect(g.graph.vertices).to.have.lengthOf(aesir_count + vanir_count);
+    });
+
+    it("tests serialization", () => {
+      const jsonGraph = jsonifyGraph(g.graph);
+      const loadedGraph = graphFromJSON(jsonGraph);
+      expect(loadedGraph.vertices).to.deep.equal(g.graph.vertices);
+      expect(loadedGraph.edges).to.deep.equal(g.graph.edges);
+      expect(loadedGraph.vertexIndex).to.deep.equal(g.graph.vertexIndex);
+    });
+
+    it("tests persistence", () => {
+      const graphName = "test_graph";
+      persist(g.graph, graphName);
+      const g2 = new Graphene(null, null);
+      g2.setGraph(depersist(graphName));
+
+      const edges_count = relationships.length;
+      expect(g2.graph.edges).to.have.lengthOf(edges_count);
+      expect(g2.graph.vertices).to.have.lengthOf(aesir_count + vanir_count);
     });
   });
 
