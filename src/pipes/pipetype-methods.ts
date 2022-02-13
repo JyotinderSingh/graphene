@@ -84,6 +84,7 @@ export const simpleTraversal = (direction: "out" | "in") => {
 };
 
 export const propertyPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   gremlin: IGremlin, _state: IGraphState) => {
   // no gremlin, so we need to pull (query initialization).
   if (!gremlin) return "pull";
@@ -135,6 +136,7 @@ export const uniquePipeTypeMethod: TypePipeMethod = (_graph: Graph, _args: any[]
  * @returns 
  */
 export const filterPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   gremlin: IGremlin, _state: IGraphState) => {
   if (!gremlin) {
     return "pull";  // query initialization.
@@ -197,6 +199,7 @@ export const takePipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
  * @returns 
  */
 export const asPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   gremlin: IGremlin, _state: IGraphState) => {
   // query initialization.
   if (!gremlin) return "pull";
@@ -245,6 +248,7 @@ export const mergePipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
  * @returns 
  */
 export const exceptPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   gremlin: IGremlin, _state: IGraphState) => {
   // query initialization.
   if (!gremlin) return "pull";
@@ -261,6 +265,7 @@ export const exceptPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
  * @returns 
  */
 export const backPipeTypeMethod: TypePipeMethod = (_graph: Graph, args: any[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   gremlin: IGremlin, _state: IGraphState) => {
   if (!gremlin) return "pull";
 
