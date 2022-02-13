@@ -137,6 +137,130 @@ describe("Integration Tests", () => {
       expect(out1).to.deep.equal(out2);
     });
 
+    it("g.query.v('Thor').out().in().unique().filter({survives: true}) should be the empty array, because we don't label survivors", () => {
+      const out = g.query
+        .v("Thor")
+        .out()
+        .in()
+        .unique()
+        .filter({ survives: true })
+        .run();
+      expect(out).to.deep.equal([]);
+    });
+
+    it("g.query.v('Thor').out().in().unique().filter({gender: 'male'}) should contain Thor and his sibling", () => {
+      const out = g.query
+        .v("Thor")
+        .out()
+        .in()
+        .unique()
+        .filter({ gender: "male" })
+        .run();
+      expect(out).to.contain(getAesir("Baldr"));
+      expect(out).to.contain(getAesir("Thor"));
+    });
+
+    it("g.query.v('Thor').out().out().out().in().in().in() should contain Thor and his sibling", () => {
+      const out = g.query.v("Thor").out().out().out().in().in().in().run();
+      expect(out).to.contain(getAesir("Baldr"));
+      expect(out).to.contain(getAesir("Thor"));
+    });
+
+    it("g.query.v('Thor').out().out().out().in().in().in().unique().take(10) should contain Thor and his sibling", () => {
+      const out = g.query
+        .v("Thor")
+        .out()
+        .out()
+        .out()
+        .in()
+        .in()
+        .in()
+        .unique()
+        .take(10)
+        .run();
+      expect(out).to.contain(getAesir("Baldr"));
+      expect(out).to.contain(getAesir("Thor"));
+    });
+
+    it("g.query.v('Thor').out().out().out().out().in().in().in().in().unique().take(12) should contain Thor and his sibling", () => {
+      const out = g.query
+        .v("Thor")
+        .out()
+        .out()
+        .out()
+        .out()
+        .in()
+        .in()
+        .in()
+        .in()
+        .unique()
+        .take(12)
+        .run();
+      expect(out).to.contain(getAesir("Baldr"));
+      expect(out).to.contain(getAesir("Thor"));
+    });
+
+    it("Asynchronous queries should work", () => {
+      const q = g.query.v("Auðumbla").in().in().in().property("_id").take(1);
+
+      expect(q.run()).to.deep.equal(["Vé"]);
+      expect(q.run()).to.deep.equal(["Vili"]);
+      expect(q.run()).to.deep.equal(["Odin"]);
+      expect(q.run()).to.be.empty;
+      expect(q.run()).to.be.empty;
+    });
+
+    it("Gathering ancestors up to three generations back", () => {
+      const out = g.query
+        .v("Thor")
+        .out()
+        .as("parent")
+        .out()
+        .as("grandparent")
+        .out()
+        .as("great-grandparent")
+        .merge("parent", "grandparent", "great-grandparent")
+        .run();
+
+      expect(out).to.contain(getAesir("Odin"));
+      expect(out).to.contain(getAesir("Borr"));
+      expect(out).to.contain(getAesir("Búri"));
+      expect(out).to.contain(getAesir("Jörð"));
+      expect(out).to.contain(getAesir("Nótt"));
+      expect(out).to.contain(getAesir("Nörfi"));
+      expect(out).to.contain(getAesir("Bestla"));
+      expect(out).to.contain(getAesir("Bölþorn"));
+    });
+
+    it("Get Thor's sibling Baldr", () => {
+      const out = g.query
+        .v("Thor")
+        .as("me")
+        .out()
+        .in()
+        .except("me")
+        .unique()
+        .run();
+      expect(out).to.deep.equal([getAesir("Baldr")]);
+    });
+
+    it("Get Thor's uncles and aunts", () => {
+      const out = g.query
+        .v("Thor")
+        .out()
+        .as("parent")
+        .out()
+        .in()
+        .except("parent")
+        .unique()
+        .run();
+      expect(out).to.deep.equal([
+        getAesir("Vé"),
+        getAesir("Vili"),
+        getAesir("Dagr"),
+      ]);
+    });
+
     /// ALIASES
 
     it("parents alias", () => {
@@ -144,6 +268,25 @@ describe("Integration Tests", () => {
       const out1 = g.query.v("Thor").parents().property("_id").run();
       const out2 = g.query.v("Thor").out("parent").property("_id").run();
       expect(out1).to.deep.equal(out2);
+    });
+
+    it("children alias", () => {
+      g.addAlias("children", [["in", "parent"]]);
+      const out1 = g.query.v("Thor").children().run();
+      expect(out1).to.deep.equal([
+        getAesir("Magni"),
+        getAesir("Þrúðr"),
+        getAesir("Móði"),
+      ]);
+    });
+
+    it("parents then children", () => {
+      const out1 = g.query.v("Thor").parents().children().run();
+      expect(out1).to.deep.equal([
+        getAesir("Thor"),
+        getAesir("Baldr"),
+        getAesir("Thor"),
+      ]);
     });
   });
 });
