@@ -6,6 +6,8 @@ Graphene is a plug-n-play in-memory graph database supporting a myriad of operat
 
 Graphene presents an idiomatic and intuitive API to build and query graphs, some examples are given below.
 
+This project is heavily inspired by the content from the book [500 Lines](https://aosabook.org/en/500L/introduction.html).
+
 | Table of Contents                             |
 | --------------------------------------------- |
 | [Installation](#installation)                 |
